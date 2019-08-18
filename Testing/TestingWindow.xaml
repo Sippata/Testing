@@ -1,0 +1,104 @@
+<Window x:Class="Testing.TestingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Testing"
+        xmlns:vm="clr-namespace:Testing.ViewModel"
+        mc:Ignorable="d"
+        Title="TestingWindow" Height="450" Width="800" x:Name="Window"
+        DataContext="{Binding Source={StaticResource ViewModel}}">
+    <Window.Resources>
+        <vm:StringToCheckBox x:Key="StringToCheckBox" />
+        <vm:StringsToCheckBoxes x:Key="ToCheckBoxes"/>
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenTest}"/>
+    </Window.InputBindings>
+    <StackPanel>
+        <!--Menu-->
+        <Menu VerticalAlignment="Top">
+            <MenuItem Header="Тест">
+                <MenuItem Header="Открыть" Command="{Binding OpenTest}"
+                          CommandParameter="{RelativeSource FindAncestor, AncestorType=Window}" 
+                          InputGestureText="Ctrl+O"/>
+            </MenuItem>
+            <MenuItem Header="Настройки">
+                <MenuItem Header="Параметры" Command="{Binding Setting}" 
+                          CommandParameter="{RelativeSource FindAncestor, AncestorType=Window}"/>
+            </MenuItem>
+        </Menu>
+        
+        <Grid>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1.6*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.7*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Text block for question -->
+            <TextBlock Grid.Row="0" Grid.Column="0" TextWrapping="Wrap"
+                       FontSize="16" Margin="10" Text="{Binding QuestionText}"/>
+            
+            <!-- Image block -->
+            <Image Grid.Row="0" Grid.Column="1" Source="{Binding Picture}" />
+
+            <ScrollViewer Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <!-- List of answers -->
+                    <ListBox ItemsSource="{Binding Answers}"
+                             x:Name="AnswerListBox">
+                        
+                    </ListBox>
+                
+                    <!-- Button for send and skip answer -->
+                    <StackPanel Orientation="Horizontal">
+                        <Button Width="80" HorizontalAlignment="Left" Margin="20 10 0 0"
+                                Command="{Binding SendAnswer}" 
+                                CommandParameter="{Binding ElementName=AnswerListBox}">
+                            Принять
+                        </Button>
+                        <Button Width="80" HorizontalAlignment="Right" Margin="0 10 20 0"
+                                Command="{Binding SkipQuestion}">
+                            Пропустить
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+
+            <Grid Grid.Row="1" Grid.Column="1" Margin="10">
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Progress bars information-->
+                <StackPanel>
+                    <TextBlock Text="{Binding CorrectAnswersCount, StringFormat=Кол-во правильных ответов: {0}}"/>
+                    <ProgressBar Height="10" Margin="5" Background="Green" Minimum="0"
+                        Value="{Binding CorrectAnswersCount}" Maximum="{Binding QuestionsCount}"/>
+                    <TextBlock 
+                        Text="{Binding WrongAnswerCount, StringFormat=Кол-во неправильных ответов: {0}}"/>
+                    <ProgressBar Height="10" Margin="5" Background="Gray" Minimum="0" 
+                        Value="{Binding WrongAnswerCount}" Maximum="{Binding QuestionsCount}"/>
+                </StackPanel>
+                
+                <!-- Timer -->
+                <TextBlock Grid.Row="0" Grid.Column="1" TextAlignment="Center" FontSize="14"
+                           FontStretch="ExtraExpanded" Text="{Binding TimeText}"/>
+                <!-- The number of remaining questions -->
+                <TextBlock Grid.Row="1" Grid.Column="1" TextAlignment="Center" FontSize="14"
+                           FontStretch="ExtraExpanded" Text="{Binding RemainingQuestionCount}"/>
+            </Grid>
+        </Grid>
+    </StackPanel>
+</Window>

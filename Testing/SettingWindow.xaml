@@ -1,0 +1,54 @@
+<Window x:Class="Testing.SettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Testing"
+        xmlns:vm="clr-namespace:Testing.ViewModel"
+        mc:Ignorable="d"
+        Title="SettingWindow" Height="230" Width="650" x:Name="Window">
+    
+    <StackPanel>
+        <Grid Margin="10" x:Name="MainStackPanel">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Папка с базами данных:" Margin="5" />
+                <TextBlock Text="Папка с изображениями:" Margin="5"/>
+                <TextBlock Text="Папка для отчетов:" Margin="5"/>
+                <TextBlock Text="Расширение отчетов" Margin="5"/>
+                <TextBlock Text="Пароль" Margin="5"/>
+            </StackPanel>
+            
+            <StackPanel Grid.Column="1">
+                <TextBox IsReadOnly="True" Margin="5" x:Name="DbTextBox"/>
+                <TextBox IsReadOnly="True" Margin="5" x:Name="ImgTextBox"/>
+                <TextBox IsReadOnly="True" Margin="5" x:Name="ReportTextBox"/>
+                <TextBox IsReadOnly="True" Margin="5" x:Name="ExTextBox" TextChanged="ExTextBox_OnTextChanged"/>
+                <TextBox Margin="5" TextChanged="TextBoxBase_OnTextChanged" x:Name="PassTextBox"/>
+            </StackPanel>
+            
+            <StackPanel Grid.Column="2">
+                <Button Content=" Обзор " Margin="5" Click="ButtonBase_OnClick" x:Name="Db"/>
+                <Button Content=" Обзор " Margin="5" Click="ButtonBase_OnClick" x:Name="Img"/>
+                <Button Content=" Обзор " Margin="5" Click="ButtonBase_OnClick" x:Name="Report"/>
+            </StackPanel>
+        </Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,20,0" 
+                    x:Name="InnerStackPanel">
+            <Button x:Name="OkButton" Click="OkButton_OnClick" Content="Сохранить" Margin="5"/>
+            <Button Click="OnClose" Content="Отмена" Margin="5"/>
+        </StackPanel>
+        <StackPanel x:Name="PasswordField" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center" 
+                    Margin="0, 50, 0, 0">
+            <TextBlock Margin="5">Введите пароль</TextBlock>
+            <PasswordBox x:Name="PasswordBox" PasswordChanged="PasswordField_OnTextInput"
+                         Width="100"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

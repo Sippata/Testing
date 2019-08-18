@@ -1,0 +1,50 @@
+﻿<Window x:Class="Testing.StudentInfoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Testing"
+        xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="210" Width="450" x:Name="Window"
+        DataContext="{Binding Source={StaticResource ViewModel}}">
+    <Window.Resources>
+        <controls:BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+    </Window.Resources>
+    <StackPanel Margin="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <!-- Firstname -->
+            <TextBlock>Фамилия</TextBlock>
+            <TextBox Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding Path=Firstname, Mode=OneWayToSource}"/>
+            <!-- Lastname -->
+            <TextBlock Grid.Column="0" Grid.Row="1">Имя</TextBlock>
+            <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Path=Lastname, Mode=OneWayToSource}"/>
+            <!-- Group -->
+            <TextBlock Grid.Column="0" Grid.Row="2">Группа</TextBlock>
+            <TextBox Grid.Column="1" Grid.Row="2" Margin="5" Text="{Binding Path=Group, Mode=OneWayToSource}"/>
+            <!-- Record book -->
+            <TextBlock Grid.Column="0" Grid.Row="3"
+                       Visibility="{Binding Converter={StaticResource VisibilityConverter}, Path=IsExam}">
+                Номер зачетной книжки
+            </TextBlock>
+            <TextBox Grid.Column="1" Grid.Row="3" Margin="5" Text="{Binding Path=RecordBookNum, Mode=OneWayToSource}"
+                     Visibility="{Binding Converter={StaticResource VisibilityConverter}, Path=IsExam}" />
+        </Grid>
+        
+        <!-- Buttons -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Margin="10" Content="Принять" Command="{Binding SendStudentInfo}"
+                    CommandParameter="{Binding ElementName=Window}" />
+        </StackPanel>
+    </StackPanel>
+</Window>

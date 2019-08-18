@@ -1,0 +1,29 @@
+<Window x:Class="Testing.ResultWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Testing"
+        mc:Ignorable="d"
+        Title="ResultWindow" Height="240" Width="300" x:Name="Window"
+        DataContext="{Binding Source={StaticResource ViewModel}}">
+    <StackPanel Margin="5, 30, 5, 10">
+        <TextBlock Text="Тест завершен" TextAlignment="Center" FontSize="16" Margin="0,0,0,20"/>
+        
+        <TextBlock Text="{Binding FullName, StringFormat=Студент {0}}" FontSize="14" TextWrapping="Wrap" 
+                   Margin="0,0,0,5"/>
+        
+        <TextBlock Text="{Binding Group, StringFormat=Группа {0}}" FontSize="14" TextWrapping="Wrap"
+                   Margin="0,0,0,5" />
+        
+        <TextBlock Text="{Binding Mark, StringFormat=Оценка {0}}" FontSize="14" HorizontalAlignment="Center"
+                   Margin="0,5,0,5"/>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button HorizontalAlignment="Center" Content="Продолжить" Margin="10" 
+                    Command="{Binding Continue}" CommandParameter="{Binding ElementName=Window}"/>
+            <Button HorizontalAlignment="Center" Content="Выход" Margin="10"
+                    Command="{Binding Exit}" CommandParameter="{Binding ElementName=Window}"/>
+        </StackPanel>
+    </StackPanel>
+</Window>
