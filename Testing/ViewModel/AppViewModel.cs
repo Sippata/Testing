@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Media;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,7 +12,7 @@ using Testing.Model;
 
 namespace Testing.ViewModel
 {
-    public class AppViewModel : INotifyPropertyChanged, IDataErrorInfo
+    public class AppViewModel : INotifyPropertyChanged
     {
         private static Action _reload;
         private static Action _increaseCorrectAnswer;
@@ -87,14 +85,9 @@ namespace Testing.ViewModel
         }
 
 
-        public string TestTime
+        public double TestTime
         {
-            get => TestInfo.TestTime.ToString("g");
-            set
-            {
-                int.TryParse(value, out int minutes);
-                TestInfo.TestTime = TimeSpan.FromMinutes(minutes);
-            }
+            set => TestInfo.TestTime = TimeSpan.FromMinutes(value);
         }
         
         public bool IsExam
@@ -330,58 +323,5 @@ namespace Testing.ViewModel
         
         #endregion
 
-        #region IDataErrorInfo
-
-        public string this[string columnName]
-        {
-            get
-            {
-                string error = string.Empty;
-                switch (columnName)
-                {
-                    case nameof(Firstname):
-                        if (Firstname == string.Empty)
-                        {
-                            error = "Поле 'Фамилия' не может быть пустым";
-                        }
-                        break;
-                    case nameof(Lastname):
-                        if (Lastname == string.Empty)
-                        {
-                            error = "Поле 'Имя' не может быть пустым";
-                        }
-                        break;
-                    case nameof(Group):
-                        if (Group == string.Empty)
-                        {
-                            error = "Поле 'Группа' не может быть пустым";
-                        }
-                        break;
-                    case nameof(RecordBookNum):
-                        if (RecordBookNum == string.Empty)
-                        {
-                            error = "Поле 'Номер зачетной книжки' не может быть пустым";
-                        }
-                        break;
-                    case nameof(DbFileName):
-                        var dir = ConfigurationManager.AppSettings["dbDir"];
-                        if (!File.Exists(Path.Combine(dir, DbFileName)))
-                        {
-                            error = "Файл с заданным именем не сущесвует";
-                        }
-                        break;
-                    case nameof(QuestionsCount):
-                        if (QuestionsCount < 0) error = "Кол-во вопросов не должно быть < 0";
-                        break;
-                }
-
-                return error;
-            }
-        }
-
-        public string Error { get; }
-        
-
-        #endregion
     }
 }

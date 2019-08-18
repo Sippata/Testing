@@ -29,4 +29,3 @@ C:\Users\Григорий\RiderProjects\Testing\Testing\bin\Debug\NLog.xml
 C:\Users\Григорий\RiderProjects\Testing\Testing\bin\Debug\NLog.config
 C:\Users\Григорий\RiderProjects\Testing\Testing\obj\Debug\ResultWindow.g.cs
 C:\Users\Григорий\RiderProjects\Testing\Testing\obj\Debug\ResultWindow.baml
-C:\Users\Григорий\RiderProjects\Testing\Testing\obj\Debug\Testing.csproj.ResolveComReference.cache

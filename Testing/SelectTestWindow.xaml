@@ -22,15 +22,39 @@
             
             <!-- Db Name -->
             <TextBlock Text="Тест" />
-            <TextBox Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding DbFileName, Mode=OneWayToSource}" />
-            
+            <TextBox Grid.Column="1" Grid.Row="0" Margin="5">
+                <TextBox.Text>
+                    <Binding Path="DbFileName" Mode="OneWayToSource">
+                        <Binding.ValidationRules>
+                            <vm:DbFileValidator ValidationStep="RawProposedValue" ValidatesOnTargetUpdated="True"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
             <!-- Question Count-->
             <TextBlock Text="Кол-во вопросов" Grid.Column="0" Grid.Row="1" />
-            <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding QuestionsCount, Mode=OneWayToSource}" />
-            
+            <TextBox Grid.Column="1" Grid.Row="1" Margin="5">
+                <TextBox.Text>
+                    <Binding Path="QuestionsCount" Mode="OneWayToSource">
+                        <Binding.ValidationRules>
+                            <vm:IntValidator ValidationStep="RawProposedValue" ValidatesOnTargetUpdated="False"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
             <!-- Time Span -->
             <TextBlock Text="Время(мин.)" Grid.Column="0" Grid.Row="2"/>
-            <TextBox Grid.Column="1" Grid.Row="2" Margin="5" Text="{Binding TestTime, Mode=OneWayToSource}" />
+            <TextBox Grid.Column="1" Grid.Row="2" Margin="5">
+                <TextBox.Text>
+                    <Binding Path="TestTime" Mode="OneWayToSource">
+                        <Binding.ValidationRules>
+                            <vm:DoubleValidator ValidationStep="RawProposedValue"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
         </Grid>
         
         <CheckBox Content="Экзамен" IsChecked="{Binding IsExam}"></CheckBox>
@@ -38,7 +62,7 @@
         <!-- Buttons -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Margin="10" Content="Принять" Command="{Binding SendTestInfo}"
-                    CommandParameter="{Binding ElementName=Window}" />
+                    CommandParameter="{Binding ElementName=Window}" IsEnabled="{Binding }"/>
             <Button Margin="10" Content="Выход" Command="{Binding CloseWindow}"
                     CommandParameter="{Binding ElementName=Window}" />
         </StackPanel>

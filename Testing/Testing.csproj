@@ -87,6 +87,7 @@
     <Compile Include="ViewModel\Converters.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\MainVM.cs" />
+    <Compile Include="ViewModel\Validators.cs" />
     <Compile Include="ViewModel\VMLocator.cs" />
     <Page Include="ResultWindow.xaml" />
     <Page Include="SettingWindow.xaml" />
@@ -129,17 +130,6 @@
     </None>
     <None Include="NLog.xsd" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="System_Windows_Forms">
-      <Guid>{215D64D2-031C-33C7-96E3-61794CD1EE61}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>4</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

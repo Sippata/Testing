@@ -9,7 +9,7 @@ namespace Testing.Model
         public string TableName => Path.GetFileNameWithoutExtension(DbFileInfo.Name);
         public TimeSpan TestTime { get; set; }
         public DateTime TestStartTime { get; set; }
-        public int QuestionCount { get; set; }
+        public int QuestionCount { get; set; } = 0;
         public int CorrectAnswersCount { get; set; } = 0;
         public double Rate => (double)CorrectAnswersCount / QuestionCount * 100;
         public bool IsExam { get; set; }

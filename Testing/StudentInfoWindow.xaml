@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Testing"
         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+        xmlns:vm="clr-namespace:Testing.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="210" Width="450" x:Name="Window"
         DataContext="{Binding Source={StaticResource ViewModel}}">
@@ -25,20 +26,52 @@
             </Grid.ColumnDefinitions>
             <!-- Firstname -->
             <TextBlock>Фамилия</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding Path=Firstname, Mode=OneWayToSource}"/>
+            <TextBox Grid.Column="1" Grid.Row="0" Margin="5">
+                <TextBox.Text>
+                    <Binding Path="Firstname" Mode="OneWayToSource">
+                        <Binding.ValidationRules>
+                            <vm:BlankValidator ValidationStep="UpdatedValue" ValidatesOnTargetUpdated="True"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
             <!-- Lastname -->
             <TextBlock Grid.Column="0" Grid.Row="1">Имя</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Path=Lastname, Mode=OneWayToSource}"/>
+            <TextBox Grid.Column="1" Grid.Row="1" Margin="5">
+                <TextBox.Text>
+                    <Binding Path="Lastname" Mode="OneWayToSource">
+                        <Binding.ValidationRules>
+                            <vm:BlankValidator ValidationStep="UpdatedValue" ValidatesOnTargetUpdated="True"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
             <!-- Group -->
             <TextBlock Grid.Column="0" Grid.Row="2">Группа</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="2" Margin="5" Text="{Binding Path=Group, Mode=OneWayToSource}"/>
+            <TextBox Grid.Column="1" Grid.Row="2" Margin="5">
+                <TextBox.Text>
+                    <Binding Path="Group" Mode="OneWayToSource">
+                        <Binding.ValidationRules>
+                            <vm:BlankValidator ValidationStep="UpdatedValue" ValidatesOnTargetUpdated="True"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
             <!-- Record book -->
             <TextBlock Grid.Column="0" Grid.Row="3"
                        Visibility="{Binding Converter={StaticResource VisibilityConverter}, Path=IsExam}">
                 Номер зачетной книжки
             </TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="3" Margin="5" Text="{Binding Path=RecordBookNum, Mode=OneWayToSource}"
-                     Visibility="{Binding Converter={StaticResource VisibilityConverter}, Path=IsExam}" />
+            <TextBox Grid.Column="1" Grid.Row="3" Margin="5"
+                     Visibility="{Binding Converter={StaticResource VisibilityConverter}, Path=IsExam}">
+                <TextBox.Text>
+                    <Binding Path="RecordBookNum" Mode="OneWayToSource">
+                        <Binding.ValidationRules>
+                            <vm:BlankValidator ValidationStep="UpdatedValue" ValidatesOnTargetUpdated="True"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
         </Grid>
         
         <!-- Buttons -->
