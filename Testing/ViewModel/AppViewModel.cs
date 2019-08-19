@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.IO;
 using System.Media;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -53,7 +54,6 @@ namespace Testing.ViewModel
 
                 if (timeSpan.Minutes == 0 && timeSpan.Seconds <= 0)
                     StopTest();
-                    
             };
         }
 
@@ -190,7 +190,10 @@ namespace Testing.ViewModel
         {
             _timer.Stop();
             Test.Stop();
-                
+            
+            var report = new Report(StudentInfo, TestInfo);
+            report.Write(DateTime.Now);
+            
             SystemSounds.Beep.Play();
             
             ResultWindow resultWindow = new ResultWindow();
@@ -202,7 +205,7 @@ namespace Testing.ViewModel
                 }
             }
             resultWindow.Show();
-            
+
             _clear.Invoke();
         }
 

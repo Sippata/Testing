@@ -75,8 +75,10 @@ namespace Testing.Model
             }
         }
 
-        private List<object[]> GetData(int index)
+        private List<object[]> GetData(int index, DateTime end)
         {
+            var timeSpan = end - _testInfo.TestStartTime;
+            
             if(_testInfo.IsExam)
                 return new List<object[]>()
                 {
@@ -91,8 +93,8 @@ namespace Testing.Model
                         _testInfo.Rate,
                         _testInfo.CorrectAnswersCount,
                         _testInfo.QuestionCount - _testInfo.CorrectAnswersCount,
-                        $"{0:d2}{_testInfo.TestTime.Minutes}:{1:d2}{_testInfo.TestTime.Seconds}",
                         _testInfo.TestStartTime.ToString("t"),
+                        $"{0}{timeSpan.Minutes}:{1}{timeSpan.Seconds}",
                     },
                 } ;
             else
@@ -109,8 +111,8 @@ namespace Testing.Model
                         _testInfo.Rate,
                         _testInfo.CorrectAnswersCount,
                         _testInfo.QuestionCount - _testInfo.CorrectAnswersCount,
-                        $"{0:d2}{_testInfo.TestTime.Minutes}:{1:d2}{_testInfo.TestTime.Seconds}",
                         _testInfo.TestStartTime.ToString("t"),
+                        $"{0}{timeSpan.Minutes}:{1}{timeSpan.Seconds}",
                     },
                 } ;
             }
@@ -137,20 +139,23 @@ namespace Testing.Model
         {
             var testName = Path.GetFileNameWithoutExtension(_testInfo.DbFileInfo.Name);
             var extention = ConfigurationManager.AppSettings["e"];
-            var today = DateTime.Today.ToString(CultureInfo.CurrentCulture);
+            var today = DateTime.Today.ToString("d");
             var fileName = _testInfo.IsExam 
                 ? $"Exam_{testName}_{today}{extention}" 
                 : $"{testName}_{today}{extention}";
-            var path = Path.Combine(ConfigurationManager.AppSettings["reportDir"], fileName);
+            var path = Path.GetFullPath(
+                Path.Combine(ConfigurationManager.AppSettings["reportDir"], fileName));
+            
             return new FileInfo(path);
         }
 
-        private void Write()
+        public void Write(DateTime end)
         {
             if(!IsDirExist())
                 CreateDir();
             
-            using (var excel = new ExcelPackage(GetFileInfo()))
+            using (var excel = new ExcelPackage(GetFileInfo(),
+                ConfigurationManager.AppSettings["p"]))
             {
                 ExcelWorksheet worksheet = GetWorksheet(excel);
                 
@@ -160,7 +165,7 @@ namespace Testing.Model
                     index += 1;
                 }
 
-                var insertRow = GetData(index);
+                var insertRow = GetData(index, end);
                 worksheet.Cells[index, 1, index, insertRow[0].Length].LoadFromArrays(insertRow);
 
                 excel.Encryption.Algorithm = EncryptionAlgorithm.AES256;
