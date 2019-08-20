@@ -84,10 +84,8 @@
     </Compile>
     <Compile Include="ViewModel\AppViewModel.cs" />
     <Compile Include="ViewModel\AppVM_Validate.cs" />
-    <Compile Include="ViewModel\Converters.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\MainVM.cs" />
-    <Compile Include="ViewModel\Validators.cs" />
     <Compile Include="ViewModel\VMLocator.cs" />
     <Page Include="ResultWindow.xaml" />
     <Page Include="SettingWindow.xaml" />

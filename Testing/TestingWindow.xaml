@@ -7,21 +7,21 @@
         xmlns:vm="clr-namespace:Testing.ViewModel"
         mc:Ignorable="d"
         Title="TestingWindow" Height="450" Width="800" x:Name="Window"
-        DataContext="{Binding Source={StaticResource ViewModel}}">
-    <Window.Resources>
-        <vm:StringToCheckBox x:Key="StringToCheckBox" />
-        <vm:StringsToCheckBoxes x:Key="ToCheckBoxes"/>
-    </Window.Resources>
+        DataContext="{Binding Source={StaticResource ViewModel}}" Loaded="TestingWindow_OnLoaded">
     <Window.InputBindings>
-        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenTest}"/>
+        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenTest}"
+                    CommandParameter="{RelativeSource FindAncestor, AncestorType=Window}"/>
+        <KeyBinding Key="Q" Modifiers="Control" Command="{Binding Exit}"/>
     </Window.InputBindings>
-    <StackPanel>
+    <StackPanel Margin="5">
         <!--Menu-->
         <Menu VerticalAlignment="Top">
             <MenuItem Header="Тест">
                 <MenuItem Header="Открыть" Command="{Binding OpenTest}"
                           CommandParameter="{RelativeSource FindAncestor, AncestorType=Window}" 
                           InputGestureText="Ctrl+O"/>
+                <MenuItem Header="Выход" Command="{Binding Exit}" InputGestureText="Ctrl+Q"
+                          CommandParameter="{RelativeSource FindAncestor, AncestorType=Window}"/>
             </MenuItem>
             <MenuItem Header="Настройки">
                 <MenuItem Header="Параметры" Command="{Binding Setting}" 
@@ -52,7 +52,6 @@
                     <!-- List of answers -->
                     <ListBox ItemsSource="{Binding Answers}"
                              x:Name="AnswerListBox">
-                        
                     </ListBox>
                 
                     <!-- Button for send and skip answer -->

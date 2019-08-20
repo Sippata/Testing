@@ -8,7 +8,8 @@
         xmlns:vm="clr-namespace:Testing.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="210" Width="450" x:Name="Window"
-        DataContext="{Binding Source={StaticResource ViewModel}}" controls:Validation.Error="OnError">
+        DataContext="{Binding Source={StaticResource ViewModel}}" controls:Validation.Error="OnError" 
+        Loaded="Window_OnLoaded">
     <Window.Resources>
         <controls:BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
     </Window.Resources>

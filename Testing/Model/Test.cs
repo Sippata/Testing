@@ -12,7 +12,8 @@ namespace Testing.Model
         private const int MaxAnswerCount = 6;
         private RandomIterator<DataRow> Rows { get; set; }
         public Question Question { get; } = new Question();
-        
+        public bool IsTestStopped { get; set; } = true;
+
         private TestInfo _testInfo;
         private void RefreshQuestion()
         {
@@ -64,11 +65,13 @@ namespace Testing.Model
             _testInfo.TestStartTime = DateTime.Now;
 
             CanMove = true;
+            IsTestStopped = false;
         }
 
         public void Stop()
         {
             CanMove = false;
+            IsTestStopped = true;
         }
 
         public bool NextQuestion()

@@ -22,7 +22,7 @@ namespace Testing.ViewModel
         private static Action _clear;
         private static readonly bool[] IsTestInfo = new bool[3];
         private static readonly bool[] IsStudentInfo = new bool[4];
-        private static Predicate<object> _isExam; 
+        private static Predicate<object> _isExam;
         
         private static DispatcherTimer _timer;
 
@@ -287,6 +287,11 @@ namespace Testing.ViewModel
             resultWindow.Show();
 
             _clear.Invoke();
+
+            for (int i = 0; i < IsStudentInfo.Length; i++)
+            {
+                IsStudentInfo[i] = false;
+            }
         }
 
         private static bool CheckAnswer(ListBox listBox)
@@ -381,12 +386,8 @@ namespace Testing.ViewModel
         
         public static RelayCommand Exit { get; } = new RelayCommand(window =>
         {
-            if (window is Window wnd)
-            {
-                wnd.Owner?.Close();
-                wnd.Close();
-            }
-        });
+            Application.Current.Shutdown();
+        }, o => Test.IsTestStopped);
         
         public static RelayCommand Setting { get; } = new RelayCommand( window =>
         {
