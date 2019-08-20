@@ -37,5 +37,43 @@ namespace Testing.Model
             
             return ds;
         }
+
+        public static bool CanOpen(string fullPath, out string errorMes)
+        {
+            bool canOpen = true;
+            errorMes = "";
+
+            var builder = new OleDbConnectionStringBuilder
+            {
+                ConnectionString = $"Data Source={fullPath}",
+                Provider = ConfigurationManager.ConnectionStrings["AccessDb"].ProviderName
+            };
+            
+            OleDbConnection connection = null;
+
+            try
+            {
+                connection = new OleDbConnection(builder.ConnectionString);
+
+                connection.Open();
+            }
+            catch (InvalidOperationException)
+            {
+                canOpen = false;
+                errorMes = "OpenFault";
+            }
+            catch (OleDbException)
+            {
+                canOpen = false;
+                errorMes = "NotDb";
+            }
+            finally
+            {
+                connection?.Close();
+                connection?.Dispose();
+            }
+
+            return canOpen;
+        }
     }
 }

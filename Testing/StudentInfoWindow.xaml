@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:Testing.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="210" Width="450" x:Name="Window"
-        DataContext="{Binding Source={StaticResource ViewModel}}">
+        DataContext="{Binding Source={StaticResource ViewModel}}" controls:Validation.Error="OnError">
     <Window.Resources>
         <controls:BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
     </Window.Resources>
@@ -24,60 +24,38 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            
             <!-- Firstname -->
             <TextBlock>Фамилия</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="0" Margin="5">
-                <TextBox.Text>
-                    <Binding Path="Firstname" Mode="OneWayToSource">
-                        <Binding.ValidationRules>
-                            <vm:BlankValidator ValidationStep="UpdatedValue" ValidatesOnTargetUpdated="True"/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </TextBox.Text>
-            </TextBox>
+            <TextBox Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding Path=Firstname, 
+                    NotifyOnValidationError=True}" LostFocus="TextBox_OnLostFocus" x:Name="Firstname"/>
+            
             <!-- Lastname -->
             <TextBlock Grid.Column="0" Grid.Row="1">Имя</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="1" Margin="5">
-                <TextBox.Text>
-                    <Binding Path="Lastname" Mode="OneWayToSource">
-                        <Binding.ValidationRules>
-                            <vm:BlankValidator ValidationStep="UpdatedValue" ValidatesOnTargetUpdated="True"/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </TextBox.Text>
-            </TextBox>
+            <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Path=Lastname, 
+                    NotifyOnValidationError=True}" LostFocus="TextBox_OnLostFocus" x:Name="Lastname" />
+            
             <!-- Group -->
             <TextBlock Grid.Column="0" Grid.Row="2">Группа</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="2" Margin="5">
-                <TextBox.Text>
-                    <Binding Path="Group" Mode="OneWayToSource">
-                        <Binding.ValidationRules>
-                            <vm:BlankValidator ValidationStep="UpdatedValue" ValidatesOnTargetUpdated="True"/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </TextBox.Text>
-            </TextBox>
+            <TextBox Grid.Column="1" Grid.Row="2" Margin="5" Text="{Binding Path=Group, 
+                    NotifyOnValidationError=True}" LostFocus="TextBox_OnLostFocus" x:Name="Group"/>
+            
             <!-- Record book -->
             <TextBlock Grid.Column="0" Grid.Row="3"
                        Visibility="{Binding Converter={StaticResource VisibilityConverter}, Path=IsExam}">
                 Номер зачетной книжки
             </TextBlock>
             <TextBox Grid.Column="1" Grid.Row="3" Margin="5"
-                     Visibility="{Binding Converter={StaticResource VisibilityConverter}, Path=IsExam}">
-                <TextBox.Text>
-                    <Binding Path="RecordBookNum" Mode="OneWayToSource">
-                        <Binding.ValidationRules>
-                            <vm:BlankValidator ValidationStep="UpdatedValue" ValidatesOnTargetUpdated="True"/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </TextBox.Text>
-            </TextBox>
+                     Visibility="{Binding Converter={StaticResource VisibilityConverter}, Path=IsExam}"
+                     Text="{Binding Path=RecordBookNum, NotifyOnValidationError=True}" 
+                     LostFocus="TextBox_OnLostFocus"  x:Name="BookNum"/>
         </Grid>
         
         <!-- Buttons -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Margin="10" Content="Принять" Command="{Binding SendStudentInfo}"
-                    CommandParameter="{Binding ElementName=Window}" />
+                    CommandParameter="{Binding ElementName=Window}" 
+                    x:Name="SendButton"/>
         </StackPanel>
     </StackPanel>
 </Window>

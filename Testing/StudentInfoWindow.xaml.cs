@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Testing
@@ -8,19 +9,26 @@ namespace Testing
     /// </summary>
     public partial class StudentInfoWindow
     {
+        private int _noOfErrorsOnScreen;
+
         public StudentInfoWindow()
         {
             InitializeComponent();
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private void TextBox_OnLostFocus(object sender, RoutedEventArgs e)
         {
-            Close();
+            (sender as TextBox)?.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
         }
-
-        private void CommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+        
+        private void OnError(object sender, ValidationErrorEventArgs e)
         {
-            Close();
+            if (e.Action == ValidationErrorEventAction.Added)
+                _noOfErrorsOnScreen++;
+            else
+                _noOfErrorsOnScreen--;
+
+            SendButton.IsEnabled = _noOfErrorsOnScreen <= 0;
         }
     }
 }

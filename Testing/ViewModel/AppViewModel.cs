@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Media;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,18 +14,24 @@ using Testing.Model;
 
 namespace Testing.ViewModel
 {
-    public class AppViewModel : INotifyPropertyChanged
+    public partial class AppViewModel : INotifyPropertyChanged
     {
         private static Action _reload;
         private static Action _increaseCorrectAnswer;
         private static Action _increaseWrongAnswer;
         private static Action _clear;
-        private static DispatcherTimer _timer;
+        private static readonly bool[] IsTestInfo = new bool[3];
+        private static readonly bool[] IsStudentInfo = new bool[4];
+        private static Predicate<object> _isExam; 
         
+        private static DispatcherTimer _timer;
+
         private static bool IsTestLoaded { get; set; }
 
         public AppViewModel()
         {
+            _isExam = o => IsExam; 
+            
             _clear = () =>
             {
                 CorrectAnswersCount = 0;
@@ -57,9 +64,9 @@ namespace Testing.ViewModel
             };
         }
 
-        public static StudentInfo StudentInfo { get; } = new StudentInfo();
-        public static TestInfo TestInfo { get; } = new TestInfo();
-        public static Test Test { get; } = new Test();
+        private static StudentInfo StudentInfo { get; } = new StudentInfo();
+        private static TestInfo TestInfo { get; } = new TestInfo();
+        private static Test Test { get; } = new Test();
 
         #region TestInfo
 
@@ -68,9 +75,17 @@ namespace Testing.ViewModel
             get => TestInfo.DbFileInfo.Name;
             set
             {
-                var path = Path.Combine(
-                    ConfigurationManager.AppSettings["dbDir"], value);
-                TestInfo.DbFileInfo = new FileInfo(path);
+                if(IsFileValid(value))
+                {
+                    var path = Path.Combine(
+                        ConfigurationManager.AppSettings["dbDir"], value);
+                    TestInfo.DbFileInfo = new FileInfo(path);
+                    IsTestInfo[0] = true;
+                }
+                else
+                {
+                    IsTestInfo[0] = false;
+                }
             }
         }
         
@@ -79,17 +94,38 @@ namespace Testing.ViewModel
             get => TestInfo.QuestionCount;
             set
             {
-                TestInfo.QuestionCount = value;
-                OnPropertyChanged(nameof(QuestionsCount));
+                if (IsIntValid(value, nameof(QuestionsCount)))
+                {
+                    TestInfo.QuestionCount = value;
+                    OnPropertyChanged(nameof(QuestionsCount));
+                    
+                    IsTestInfo[1] = true;
+                }
+                else
+                {
+                    IsTestInfo[1] = false;
+                }
             }
         }
 
 
         public double TestTime
         {
-            set => TestInfo.TestTime = TimeSpan.FromMinutes(value);
+            set
+            {
+                if (IsDoubleValid(value, nameof(TestTime)))
+                {
+                    var temp = value;
+                    TestInfo.TestTime = TimeSpan.FromMinutes(temp);
+                    IsTestInfo[2] = true;
+                }
+                else
+                {
+                    IsTestInfo[2] = false;
+                }
+            }
         }
-        
+
         public bool IsExam
         {
             get => TestInfo.IsExam;
@@ -106,25 +142,69 @@ namespace Testing.ViewModel
         public string Firstname
         {
             get => StudentInfo.Firstname;
-            set => StudentInfo.Firstname = value;
+            set
+            {
+                if (IsStrValid(value, nameof(Firstname)))
+                {
+                    StudentInfo.Firstname = value;
+                    IsStudentInfo[0] = true;
+                }
+                else
+                {
+                    IsStudentInfo[0] = false;
+                }
+            }
         }
 
         public string Lastname
         {
             get => StudentInfo.Lastname;
-            set => StudentInfo.Lastname = value;
+            set
+            {
+                if (IsStrValid(value, nameof(Lastname)))
+                {
+                    StudentInfo.Lastname = value;
+                    IsStudentInfo[1] = true;
+                }
+                else
+                {
+                    IsStudentInfo[1] = false;
+                }
+            }
         }
 
         public string Group
         {
             get => StudentInfo.Grope;
-            set => StudentInfo.Grope = value;
+            set
+            {
+                if (IsStrValid(value, nameof(Group)))
+                {
+                    StudentInfo.Grope = value;
+                    IsStudentInfo[2] = true;
+                }
+                else
+                {
+                    IsStudentInfo[2] = false;
+                }
+            }
         }
 
         public string RecordBookNum
         {
             get => StudentInfo.RecordBookNum;
-            set => StudentInfo.RecordBookNum = value;
+            set
+            {
+                if (IsStrValid(value, nameof(RecordBookNum)))
+                {
+                    StudentInfo.RecordBookNum = value;
+                    IsStudentInfo[3] = true;
+                }
+                else
+                {
+                    IsStudentInfo[3] = false;
+                }
+            }
         }
 
         #endregion // StudentInfo
@@ -141,7 +221,7 @@ namespace Testing.ViewModel
                 var list = new List<CheckBox>();
                 foreach (var pair in Test.Question.AnswerPairs)
                 {
-                    list.Add(new CheckBox(){Content = pair.Key});
+                    list.Add(new CheckBox{Content = pair.Key});
                 }
                 return list;
             }
@@ -243,6 +323,11 @@ namespace Testing.ViewModel
             _timer.Start();
             _reload.Invoke();
             CloseWindow.Execute(window);
+        }, o =>
+        {
+            bool temp = IsStudentInfo[0] && IsStudentInfo[1] && IsStudentInfo[2];
+            bool temp2 = !(IsStudentInfo[3] ^ _isExam(null));
+            return temp && temp2;
         });
 
         public static RelayCommand SendTestInfo { get; } = new RelayCommand(window =>
@@ -254,7 +339,7 @@ namespace Testing.ViewModel
                 studentInfoWindow.Owner = wnd.Owner;
             studentInfoWindow.Show();
             CloseWindow.Execute(window);
-        });
+        }, o => IsTestInfo.All(b => b));
 
         public static RelayCommand OpenTest { get; } = new RelayCommand(window =>
         {
