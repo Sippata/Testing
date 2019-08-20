@@ -197,7 +197,7 @@ namespace Testing.ViewModel
             get => StudentInfo.RecordBookNum;
             set
             {
-                if (IsStrValid(value, nameof(RecordBookNum)))
+                if (IsRecordBookNumValid(value))
                 {
                     StudentInfo.RecordBookNum = value;
                     IsStudentInfoValid[3] = true;

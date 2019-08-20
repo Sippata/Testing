@@ -29,16 +29,19 @@
             <!-- Firstname -->
             <TextBlock>Фамилия</TextBlock>
             <TextBox Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding Path=Firstname, 
+                    UpdateSourceTrigger=PropertyChanged,
                     NotifyOnValidationError=True}" LostFocus="TextBox_OnLostFocus" x:Name="Firstname"/>
             
             <!-- Lastname -->
             <TextBlock Grid.Column="0" Grid.Row="1">Имя</TextBlock>
             <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Path=Lastname, 
+                    UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,
                     NotifyOnValidationError=True}" LostFocus="TextBox_OnLostFocus" x:Name="Lastname" />
             
             <!-- Group -->
             <TextBlock Grid.Column="0" Grid.Row="2">Группа</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="2" Margin="5" Text="{Binding Path=Group, 
+            <TextBox Grid.Column="1" Grid.Row="2" Margin="5" Text="{Binding Path=Group,
+                    UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,
                     NotifyOnValidationError=True}" LostFocus="TextBox_OnLostFocus" x:Name="Group"/>
             
             <!-- Record book -->
@@ -48,7 +51,8 @@
             </TextBlock>
             <TextBox Grid.Column="1" Grid.Row="3" Margin="5"
                      Visibility="{Binding Converter={StaticResource VisibilityConverter}, Path=IsExam}"
-                     Text="{Binding Path=RecordBookNum, NotifyOnValidationError=True}" 
+                     Text="{Binding Path=RecordBookNum, NotifyOnValidationError=True, ValidatesOnDataErrors=True,
+                     UpdateSourceTrigger=PropertyChanged}" 
                      LostFocus="TextBox_OnLostFocus"  x:Name="BookNum"/>
         </Grid>
         

@@ -15,6 +15,7 @@ namespace Testing.ViewModel
         private const string FileOpenError = "Невозможно открыть файл";
         private const string MsAccessError = "Файл не является базой данных MSAccess";
         private const string PositiveNumError = "Число должно быть положительным";
+        private const string NumberError = "Ожидалось число"; 
         
 
         public void AddError(string propertyName, string error)
@@ -38,7 +39,7 @@ namespace Testing.ViewModel
         {
             bool isValid;
             
-            if (string.IsNullOrEmpty(str))
+            if (string.IsNullOrWhiteSpace(str))
             {
                 AddError(propName, BlankError);
                 isValid = false;
@@ -50,6 +51,31 @@ namespace Testing.ViewModel
             }
 
             return isValid;
+        }
+
+        private bool IsRecordBookNumValid(string str)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                AddError(nameof(RecordBookNum), BlankError);
+                return false;
+            }
+            else
+            {
+                RemoveError(nameof(RecordBookNum));
+            }
+            
+            if (!Int64.TryParse(str, out var i))
+            {
+                AddError(nameof(RecordBookNum), NumberError);
+                return false;
+            }
+            else
+            {
+                RemoveError(nameof(RecordBookNum));
+            }
+
+            return true;
         }
 
         private bool IsFileValid(string fileName)

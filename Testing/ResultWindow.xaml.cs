@@ -7,7 +7,6 @@ namespace Testing
 {
     public partial class ResultWindow : Window
     {
-        private bool _inStateChange;
         private const int GWL_STYLE = -16;
         private const int WS_SYSMENU = 0x80000;
         [DllImport("user32.dll", SetLastError = true)]
