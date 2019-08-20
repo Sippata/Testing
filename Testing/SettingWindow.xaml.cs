@@ -48,11 +48,11 @@ namespace Testing
                             break;
                         case "Img":
                             _config.Set("imgDir" ,path);
-                            DbTextBox.Text = path;
+                            ImgTextBox.Text = path;
                             break;
                         case "Report":
                             _config.Set("reportDir" ,path);
-                            DbTextBox.Text = path;
+                            ReportTextBox.Text = path;
                             break;
                     }
                 }

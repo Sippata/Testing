@@ -28,7 +28,7 @@
                 <TextBox IsReadOnly="True" Margin="5" x:Name="DbTextBox"/>
                 <TextBox IsReadOnly="True" Margin="5" x:Name="ImgTextBox"/>
                 <TextBox IsReadOnly="True" Margin="5" x:Name="ReportTextBox"/>
-                <TextBox IsReadOnly="True" Margin="5" x:Name="ExTextBox" TextChanged="ExTextBox_OnTextChanged"/>
+                <TextBox Margin="5" x:Name="ExTextBox" TextChanged="ExTextBox_OnTextChanged"/>
                 <TextBox Margin="5" TextChanged="TextBoxBase_OnTextChanged" x:Name="PassTextBox"/>
             </StackPanel>
             
