@@ -377,7 +377,7 @@ namespace Testing.ViewModel
         public static RelayCommand Exit { get; } = new RelayCommand(window =>
         {
             Application.Current.Shutdown();
-            WriteReport.Wait();
+            WriteReport?.Wait();
         }, o => Test.IsTestStopped);
         
         public static RelayCommand Setting { get; } = new RelayCommand( window =>

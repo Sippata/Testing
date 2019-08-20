@@ -13,7 +13,7 @@
                     CommandParameter="{RelativeSource FindAncestor, AncestorType=Window}"/>
         <KeyBinding Key="Q" Modifiers="Control" Command="{Binding Exit}"/>
     </Window.InputBindings>
-    <StackPanel Margin="5">
+    <StackPanel Margin="10">
         <!--Menu-->
         <Menu VerticalAlignment="Top">
             <MenuItem Header="Тест">
