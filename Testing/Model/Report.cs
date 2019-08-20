@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Threading;
 using OfficeOpenXml;
 
 namespace Testing.Model
 {
     public class Report
     {
-        private StudentInfo _studentInfo;
-        private TestInfo _testInfo;
+        private readonly StudentInfo _studentInfo;
+        private readonly TestInfo _testInfo;
         
         public Report(StudentInfo studentInfo, TestInfo testInfo)
         {
@@ -75,9 +76,9 @@ namespace Testing.Model
             }
         }
 
-        private List<object[]> GetData(int index, DateTime end)
+        private List<object[]> GetData(int index)
         {
-            var timeSpan = end - _testInfo.TestStartTime;
+            var timeSpan = _testInfo.TestEndTime - _testInfo.TestStartTime;
             
             if(_testInfo.IsExam)
                 return new List<object[]>()
@@ -94,7 +95,7 @@ namespace Testing.Model
                         _testInfo.CorrectAnswersCount,
                         _testInfo.QuestionCount - _testInfo.CorrectAnswersCount,
                         _testInfo.TestStartTime.ToString("t"),
-                        $"{0}{timeSpan.Minutes}:{1}{timeSpan.Seconds}",
+                        $"{timeSpan.Minutes:d2}:{timeSpan.Seconds:d2}",
                     },
                 } ;
             else
@@ -112,7 +113,7 @@ namespace Testing.Model
                         _testInfo.CorrectAnswersCount,
                         _testInfo.QuestionCount - _testInfo.CorrectAnswersCount,
                         _testInfo.TestStartTime.ToString("t"),
-                        $"{0}{timeSpan.Minutes}:{1}{timeSpan.Seconds}",
+                        $"{timeSpan.Minutes:d2}:{timeSpan.Seconds:d2}",
                     },
                 } ;
             }
@@ -149,8 +150,10 @@ namespace Testing.Model
             return new FileInfo(path);
         }
 
-        public void Write(DateTime end)
+        public void Write()
         {
+            var log = NLog.LogManager.GetCurrentClassLogger();
+            
             if(!IsDirExist())
                 CreateDir();
             
@@ -165,7 +168,7 @@ namespace Testing.Model
                     index += 1;
                 }
 
-                var insertRow = GetData(index, end);
+                var insertRow = GetData(index - 1);
                 worksheet.Cells[index, 1, index, insertRow[0].Length].LoadFromArrays(insertRow);
 
                 excel.Encryption.Algorithm = EncryptionAlgorithm.AES256;
@@ -173,6 +176,11 @@ namespace Testing.Model
                 
                 excel.Save();
             }
+        }
+
+        public Task WriteAsync()
+        {
+            return Task.Factory.StartNew(Write);
         }
     }
 }

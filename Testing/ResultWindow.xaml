@@ -8,15 +8,15 @@
         Title="ResultWindow" Height="240" Width="300" x:Name="Window"
         DataContext="{Binding Source={StaticResource ViewModel}}">
     <StackPanel Margin="5, 30, 5, 10">
-        <TextBlock Text="Тест завершен" TextAlignment="Center" FontSize="16" Margin="0,0,0,20"/>
+        <TextBlock Text="Тест завершен" TextAlignment="Center" FontSize="18" Margin="0,0,0,20"/>
         
-        <TextBlock Text="{Binding FullName, StringFormat=Студент {0}}" FontSize="14" TextWrapping="Wrap" 
+        <TextBlock Text="{Binding FullName, StringFormat=Студент: {0}}" FontSize="16" TextWrapping="Wrap" 
                    Margin="0,0,0,5"/>
         
-        <TextBlock Text="{Binding Group, StringFormat=Группа {0}}" FontSize="14" TextWrapping="Wrap"
+        <TextBlock Text="{Binding Group, StringFormat=Группа: {0}}" FontSize="16" TextWrapping="Wrap"
                    Margin="0,0,0,5" />
         
-        <TextBlock Text="{Binding Mark, StringFormat=Оценка {0}}" FontSize="14" HorizontalAlignment="Center"
+        <TextBlock Text="{Binding Mark, StringFormat=Оценка: {0}}" FontSize="14" HorizontalAlignment="Center"
                    Margin="0,5,0,5"/>
         
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

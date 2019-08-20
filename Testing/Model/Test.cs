@@ -61,15 +61,16 @@ namespace Testing.Model
             NewQuestionSet(_testInfo.QuestionCount);
             
             Rows.MoveNext();
-            
-            _testInfo.TestStartTime = DateTime.Now;
 
             CanMove = true;
             IsTestStopped = false;
+            
+            _testInfo.TestStartTime = DateTime.Now;
         }
 
         public void Stop()
         {
+            _testInfo.TestEndTime = DateTime.Now;
             CanMove = false;
             IsTestStopped = true;
         }

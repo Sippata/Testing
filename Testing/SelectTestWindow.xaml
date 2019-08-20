@@ -22,19 +22,19 @@
             <!-- Db Name -->
             <TextBlock Text="Тест" />
             <TextBox Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding Path=DbFileName, 
-                    NotifyOnValidationError=True}" 
+                    NotifyOnValidationError=True, ValidatesOnDataErrors=True}" 
                     LostFocus="TextBox_OnLostFocus" x:Name="DbNameTextBox"/>
 
             <!-- Question Count-->
             <TextBlock Text="Кол-во вопросов" Grid.Column="0" Grid.Row="1" />
             <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Path=QuestionsCount,  
-                     NotifyOnValidationError=True}" 
+                     NotifyOnValidationError=True, ValidatesOnDataErrors=True}" 
                      LostFocus="TextBox_OnLostFocus" x:Name="QuestionCountTextBox"/>
 
             <!-- Time Span -->
             <TextBlock Text="Время(мин.)" Grid.Column="0" Grid.Row="2"/>
             <TextBox Grid.Column="1" Grid.Row="2" Margin="5" Text="{Binding Path=TestTime, 
-            NotifyOnValidationError=True}" 
+            NotifyOnValidationError=True, ValidatesOnDataErrors=True}" 
                      LostFocus="TextBox_OnLostFocus" x:Name="TimeTextBox"/>
             
         </Grid>

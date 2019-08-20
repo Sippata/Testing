@@ -16,12 +16,13 @@ namespace Testing.ViewModel
 {
     public partial class AppViewModel : INotifyPropertyChanged
     {
+        private static Task WriteReport;
         private static Action _reload;
         private static Action _increaseCorrectAnswer;
         private static Action _increaseWrongAnswer;
         private static Action _clear;
-        private static readonly bool[] IsTestInfo = new bool[3];
-        private static readonly bool[] IsStudentInfo = new bool[4];
+        private static readonly bool[] IsTestInfoValid = new bool[3];
+        private static readonly bool[] IsStudentInfoValid = new bool[4];
         private static Predicate<object> _isExam;
         
         private static DispatcherTimer _timer;
@@ -67,6 +68,7 @@ namespace Testing.ViewModel
         private static StudentInfo StudentInfo { get; } = new StudentInfo();
         private static TestInfo TestInfo { get; } = new TestInfo();
         private static Test Test { get; } = new Test();
+        private static Report Report { get; } = new Report(StudentInfo, TestInfo);
 
         #region TestInfo
 
@@ -80,11 +82,11 @@ namespace Testing.ViewModel
                     var path = Path.Combine(
                         ConfigurationManager.AppSettings["dbDir"], value);
                     TestInfo.DbFileInfo = new FileInfo(path);
-                    IsTestInfo[0] = true;
+                    IsTestInfoValid[0] = true;
                 }
                 else
                 {
-                    IsTestInfo[0] = false;
+                    IsTestInfoValid[0] = false;
                 }
             }
         }
@@ -99,11 +101,11 @@ namespace Testing.ViewModel
                     TestInfo.QuestionCount = value;
                     OnPropertyChanged(nameof(QuestionsCount));
                     
-                    IsTestInfo[1] = true;
+                    IsTestInfoValid[1] = true;
                 }
                 else
                 {
-                    IsTestInfo[1] = false;
+                    IsTestInfoValid[1] = false;
                 }
             }
         }
@@ -117,11 +119,11 @@ namespace Testing.ViewModel
                 {
                     var temp = value;
                     TestInfo.TestTime = TimeSpan.FromMinutes(temp);
-                    IsTestInfo[2] = true;
+                    IsTestInfoValid[2] = true;
                 }
                 else
                 {
-                    IsTestInfo[2] = false;
+                    IsTestInfoValid[2] = false;
                 }
             }
         }
@@ -147,11 +149,11 @@ namespace Testing.ViewModel
                 if (IsStrValid(value, nameof(Firstname)))
                 {
                     StudentInfo.Firstname = value;
-                    IsStudentInfo[0] = true;
+                    IsStudentInfoValid[0] = true;
                 }
                 else
                 {
-                    IsStudentInfo[0] = false;
+                    IsStudentInfoValid[0] = false;
                 }
             }
         }
@@ -164,11 +166,11 @@ namespace Testing.ViewModel
                 if (IsStrValid(value, nameof(Lastname)))
                 {
                     StudentInfo.Lastname = value;
-                    IsStudentInfo[1] = true;
+                    IsStudentInfoValid[1] = true;
                 }
                 else
                 {
-                    IsStudentInfo[1] = false;
+                    IsStudentInfoValid[1] = false;
                 }
             }
         }
@@ -181,11 +183,11 @@ namespace Testing.ViewModel
                 if (IsStrValid(value, nameof(Group)))
                 {
                     StudentInfo.Grope = value;
-                    IsStudentInfo[2] = true;
+                    IsStudentInfoValid[2] = true;
                 }
                 else
                 {
-                    IsStudentInfo[2] = false;
+                    IsStudentInfoValid[2] = false;
                 }
             }
         }
@@ -198,11 +200,11 @@ namespace Testing.ViewModel
                 if (IsStrValid(value, nameof(RecordBookNum)))
                 {
                     StudentInfo.RecordBookNum = value;
-                    IsStudentInfo[3] = true;
+                    IsStudentInfoValid[3] = true;
                 }
                 else
                 {
-                    IsStudentInfo[3] = false;
+                    IsStudentInfoValid[3] = false;
                 }
             }
         }
@@ -268,43 +270,31 @@ namespace Testing.ViewModel
 
         private static void StopTest()
         {
-            _timer.Stop();
-            Test.Stop();
-            
-            var report = new Report(StudentInfo, TestInfo);
-            report.Write(DateTime.Now);
-            
             SystemSounds.Beep.Play();
             
+            _timer.Stop();
+            Test.Stop();
+            WriteReport = Report.WriteAsync();
+
             ResultWindow resultWindow = new ResultWindow();
-            foreach (var window in Application.Current.Windows)
-            {
-                if (window is TestingWindow testingWindow)
-                {
-                    resultWindow.Owner = testingWindow;
-                }
-            }
             resultWindow.Show();
 
-            _clear.Invoke();
+            _clear();
 
-            for (int i = 0; i < IsStudentInfo.Length; i++)
+            for (int i = 0; i < IsStudentInfoValid.Length; i++)
             {
-                IsStudentInfo[i] = false;
+                IsStudentInfoValid[i] = false;
             }
         }
 
-        private static bool CheckAnswer(ListBox listBox)
+        private static bool CheckAnswer(ItemsControl listBox)
         {
             foreach (var item in listBox.Items)
             {
-                var log = NLog.LogManager.GetCurrentClassLogger();
-                log.Debug(item.ToString());
                 if (item is CheckBox checkBox)
                 {
                     var isCheckedTrue = checkBox.IsChecked == true;
                     var isCorrect = Test.Question.IsCorrect(checkBox.Content.ToString());
-                    log.Debug($"Check:{isCheckedTrue}, Corr:{isCorrect}");
                     if (isCheckedTrue ^ isCorrect)
                         return false;
                 }
@@ -330,8 +320,8 @@ namespace Testing.ViewModel
             CloseWindow.Execute(window);
         }, o =>
         {
-            bool temp = IsStudentInfo[0] && IsStudentInfo[1] && IsStudentInfo[2];
-            bool temp2 = !(IsStudentInfo[3] ^ _isExam(null));
+            bool temp = IsStudentInfoValid[0] && IsStudentInfoValid[1] && IsStudentInfoValid[2];
+            bool temp2 = !(IsStudentInfoValid[3] ^ _isExam(null));
             return temp && temp2;
         });
 
@@ -344,7 +334,7 @@ namespace Testing.ViewModel
                 studentInfoWindow.Owner = wnd.Owner;
             studentInfoWindow.Show();
             CloseWindow.Execute(window);
-        }, o => IsTestInfo.All(b => b));
+        }, o => IsTestInfoValid.All(b => b));
 
         public static RelayCommand OpenTest { get; } = new RelayCommand(window =>
         {
@@ -387,6 +377,7 @@ namespace Testing.ViewModel
         public static RelayCommand Exit { get; } = new RelayCommand(window =>
         {
             Application.Current.Shutdown();
+            WriteReport.Wait();
         }, o => Test.IsTestStopped);
         
         public static RelayCommand Setting { get; } = new RelayCommand( window =>
@@ -411,6 +402,5 @@ namespace Testing.ViewModel
         }
         
         #endregion
-
     }
 }

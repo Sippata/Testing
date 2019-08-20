@@ -6,15 +6,5 @@
              StartupUri="TestingWindow.xaml">
     <Application.Resources>
         <viewModel:AppViewModel x:Key="ViewModel" />
-        <!-- <Style TargetType="TextBox"> -->
-        <!--     <Style.Triggers> -->
-        <!--         <Trigger Property="Validation.HasError" Value="True"> -->
-        <!--             <Setter Property="ToolTip" -->
-        <!--                     Value="{Binding RelativeSource={RelativeSource Self}, -->
-        <!--             Path=(Validation.Errors)[0].ErrorContent}" /> -->
-        <!--             <Setter Property="Foreground" Value="Red" /> -->
-        <!--         </Trigger> -->
-        <!--     </Style.Triggers> -->
-        <!-- </Style> -->
     </Application.Resources>
 </Application>
