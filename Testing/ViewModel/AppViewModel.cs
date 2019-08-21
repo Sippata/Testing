@@ -223,7 +223,7 @@ namespace Testing.ViewModel
                 var list = new List<CheckBox>();
                 foreach (var pair in Test.Question.AnswerPairs)
                 {
-                    list.Add(new CheckBox{Content = pair.Key});
+                    list.Add(new CheckBox{Content = pair.Key, FontSize = 16});
                 }
                 return list;
             }
