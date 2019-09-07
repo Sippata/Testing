@@ -156,6 +156,7 @@ namespace Testing.ViewModel
                 }
                 else
                 {
+                    StudentInfo.Firstname = "";
                     IsStudentInfoValid[0] = false;
                 }
             }
@@ -173,6 +174,7 @@ namespace Testing.ViewModel
                 }
                 else
                 {
+                    StudentInfo.Lastname = "";
                     IsStudentInfoValid[1] = false;
                 }
             }
@@ -190,6 +192,7 @@ namespace Testing.ViewModel
                 }
                 else
                 {
+                    StudentInfo.Grope = "";
                     IsStudentInfoValid[2] = false;
                 }
             }
@@ -207,6 +210,7 @@ namespace Testing.ViewModel
                 }
                 else
                 {
+                    StudentInfo.RecordBookNum = "";
                     IsStudentInfoValid[3] = false;
                 }
             }
