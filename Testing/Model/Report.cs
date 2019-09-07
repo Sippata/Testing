@@ -4,7 +4,6 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Threading;
 using OfficeOpenXml;
 
 namespace Testing.Model
@@ -173,7 +172,7 @@ namespace Testing.Model
 
                 excel.Encryption.Algorithm = EncryptionAlgorithm.AES256;
                 excel.Encryption.Password = ConfigurationManager.AppSettings["p"];
-                
+
                 excel.Save();
             }
         }

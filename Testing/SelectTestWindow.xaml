@@ -29,13 +29,13 @@
             <TextBlock Text="Кол-во вопросов" Grid.Column="0" Grid.Row="1" />
             <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Path=QuestionsCount,  
                      NotifyOnValidationError=True, ValidatesOnDataErrors=True}" 
-                     LostFocus="TextBox_OnLostFocus" x:Name="QuestionCountTextBox"/>
+                     TextChanged="TextBox_OnLostFocus" x:Name="QuestionCountTextBox"/>
 
             <!-- Time Span -->
             <TextBlock Text="Время(мин.)" Grid.Column="0" Grid.Row="2"/>
             <TextBox Grid.Column="1" Grid.Row="2" Margin="5" Text="{Binding Path=TestTime, 
             NotifyOnValidationError=True, ValidatesOnDataErrors=True}" 
-                     LostFocus="TextBox_OnLostFocus" x:Name="TimeTextBox"/>
+                     TextChanged="TextBox_OnLostFocus" x:Name="TimeTextBox"/>
             
         </Grid>
         
@@ -46,7 +46,7 @@
             <Button Margin="10" Content="Принять" x:Name="SendButton" 
                     Command="{Binding SendTestInfo}"
                     CommandParameter="{Binding ElementName=Window}"/>
-            <Button Margin="10" Content="Выход" Command="{Binding CloseWindow}"
+            <Button Margin="10" Content="Отмена" Command="{Binding CloseWindow}"
                     CommandParameter="{Binding ElementName=Window}" />
         </StackPanel>
     </StackPanel>

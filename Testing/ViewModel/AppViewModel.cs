@@ -113,6 +113,7 @@ namespace Testing.ViewModel
 
         public double TestTime
         {
+            get => TestInfo.TestTime.Minutes == 0 ? throw new NullReferenceException() : TestInfo.TestTime.Minutes;
             set
             {
                 if (IsDoubleValid(value, nameof(TestTime)))
@@ -334,7 +335,7 @@ namespace Testing.ViewModel
                 studentInfoWindow.Owner = wnd.Owner;
             studentInfoWindow.Show();
             CloseWindow.Execute(window);
-        }, o => IsTestInfoValid.All(b => b));
+        }, o => IsTestInfoValid.All(b => b == true));
 
         public static RelayCommand OpenTest { get; } = new RelayCommand(window =>
         {
