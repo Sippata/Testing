@@ -11,7 +11,6 @@ namespace Testing
         public SelectTestWindow()
         {
             InitializeComponent();
-            QuestionCountTextBox.Text = "";
         }
 
         private void TextBox_OnLostFocus(object sender, RoutedEventArgs e)
@@ -29,8 +28,9 @@ namespace Testing
             {
                 _noOfErrorsOnScreen--;
             }
-
-            SendButton.IsEnabled = _noOfErrorsOnScreen <= 0;
+            
+            if(SendButton != null)
+                SendButton.IsEnabled = _noOfErrorsOnScreen <= 0;
         }
     }
 }

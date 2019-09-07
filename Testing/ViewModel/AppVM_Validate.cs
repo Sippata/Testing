@@ -20,7 +20,7 @@ namespace Testing.ViewModel
 
         public void AddError(string propertyName, string error)
         {
-            if (!_errors[propertyName].Contains(error))
+            if (!_errors.ContainsKey(propertyName))
             {
                 _errors[propertyName] = error;
             }
@@ -80,10 +80,14 @@ namespace Testing.ViewModel
 
         private bool IsFileValid(string fileName)
         {
+            NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
+            log.Debug("Checking Db file...");
             var path = Path.GetFullPath(Path.Combine(
-                ConfigurationManager.AppSettings["dbDir"], fileName));
+                ConfigurationManager.AppSettings["dbDir"], $"{fileName}.mdb"));
+            log.Debug($"Path: {path}");
             if (!File.Exists(path))
             {
+                log.Debug("File doesn't exist");
                 AddError(nameof(DbFileName), FileExistError);
                 return false;
             }
@@ -97,9 +101,11 @@ namespace Testing.ViewModel
                 switch (mes)
                 {
                     case "NotDb":
+                        log.Debug("File not AccessDB");
                         AddError(nameof(DbFileName), FileOpenError);
                         return false;
                     case "OpenFault":
+                        log.Debug("Fail opened db");
                         AddError(nameof(DbFileName), MsAccessError);
                         return false;
                     default:
@@ -108,7 +114,9 @@ namespace Testing.ViewModel
                         break;
                 }
             }
-
+            
+            log.Debug("File is valid");
+            
             return true;
         }
 

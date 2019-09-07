@@ -80,12 +80,13 @@ namespace Testing.ViewModel
                 if(IsFileValid(value))
                 {
                     var path = Path.Combine(
-                        ConfigurationManager.AppSettings["dbDir"], value);
+                        ConfigurationManager.AppSettings["dbDir"], $"{value}.mdb");
                     TestInfo.DbFileInfo = new FileInfo(path);
                     IsTestInfoValid[0] = true;
                 }
                 else
                 {
+                    TestInfo.DbFileInfo = null;
                     IsTestInfoValid[0] = false;
                 }
             }
@@ -93,7 +94,7 @@ namespace Testing.ViewModel
         
         public int QuestionsCount
         {
-            get => TestInfo.QuestionCount;
+            get => TestInfo?.QuestionCount ?? 0;
             set
             {
                 if (IsIntValid(value, nameof(QuestionsCount)))
@@ -105,6 +106,7 @@ namespace Testing.ViewModel
                 }
                 else
                 {
+                    TestInfo.QuestionCount = 0;
                     IsTestInfoValid[1] = false;
                 }
             }
