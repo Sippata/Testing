@@ -122,7 +122,7 @@ namespace Testing.ViewModel
 
         private bool IsIntValid(int value, string propName)
         {
-            if (value < 1)
+            if (value <= 0)
             {
                 AddError(propName, PositiveNumError);
                 return false;

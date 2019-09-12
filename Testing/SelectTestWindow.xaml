@@ -30,6 +30,7 @@
             <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Path=QuestionsCount,
                     NotifyOnValidationError=True, ValidatesOnDataErrors=True}"
                     TextChanged="TextBox_OnLostFocus" x:Name="QuestionCountTextBox"/>
+            
 
             <!-- Time Span -->
             <TextBlock Text="Время(мин.)" Grid.Column="0" Grid.Row="2"/>

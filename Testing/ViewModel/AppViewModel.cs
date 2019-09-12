@@ -25,7 +25,6 @@ namespace Testing.ViewModel
         private static readonly bool[] IsTestInfoValid = new bool[3];
         private static readonly bool[] IsStudentInfoValid = new bool[4];
         private static Predicate<object> _isExam;
-        private static int _checkedCount = 0;
         private static bool _canMove;
         
         
@@ -98,7 +97,7 @@ namespace Testing.ViewModel
         
         public int QuestionsCount
         {
-            get => TestInfo?.QuestionCount ?? 0;
+            get => TestInfo.QuestionCount == 0 ? throw new NullReferenceException() : TestInfo.QuestionCount;
             set
             {
                 if (IsIntValid(value, nameof(QuestionsCount)))
