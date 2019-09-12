@@ -8,6 +8,7 @@ using System.Media;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Testing.Model;
@@ -24,6 +25,9 @@ namespace Testing.ViewModel
         private static readonly bool[] IsTestInfoValid = new bool[3];
         private static readonly bool[] IsStudentInfoValid = new bool[4];
         private static Predicate<object> _isExam;
+        private static int _checkedCount = 0;
+        private static bool _canMove;
+        
         
         private static DispatcherTimer _timer;
 
@@ -223,17 +227,29 @@ namespace Testing.ViewModel
         public string QuestionText => Test.Question.QuestionText;
 
         public BitmapImage Picture => Test.Question.Picture;
+
+        private List<CheckBox> list;
+        
         public List<CheckBox> Answers
         {
             get
             {
-                var list = new List<CheckBox>();
+                list = new List<CheckBox>(4);
                 foreach (var pair in Test.Question.AnswerPairs)
                 {
-                    list.Add(new CheckBox{Content = pair.Key, FontSize = 16});
+                    var cb = new CheckBox {Content = pair.Key, FontSize = 16};
+                    cb.Click += CheckCheckBoxes;
+                    list.Add(cb);
                 }
+                
                 return list;
             }
+        }
+
+        private void CheckCheckBoxes(object o, RoutedEventArgs args)
+        {
+            _canMove = list.Any(box => box.IsChecked ?? false);
+            CommandManager.InvalidateRequerySuggested();
         }
 
         public double CorrectAnswersCount
@@ -351,7 +367,7 @@ namespace Testing.ViewModel
             selectTestWindow.Show();
         }, o => !IsTestLoaded);
 
-        public RelayCommand SendAnswer { get; } = new RelayCommand(listBox =>
+        public static RelayCommand SendAnswer { get; } = new RelayCommand(listBox =>
         {
             if (listBox is ListBox list)
                 if (CheckAnswer(list))
@@ -366,7 +382,7 @@ namespace Testing.ViewModel
             {
                 StopTest();
             }
-        }, o => Test.CanMove);
+        }, o => _canMove && Test.CanMove);
 
         public static RelayCommand SkipQuestion { get; } = new RelayCommand(o =>
         {
