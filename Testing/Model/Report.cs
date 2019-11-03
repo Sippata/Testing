@@ -47,7 +47,7 @@ namespace Testing.Model
                         "Имя",
                         "Номер зачетной книжки",
                         "Оценка",
-                        "Рейтинг",
+                        "Рейтинг(%)",
                         "Кол-во правильных ответов",
                         "Кол-во неправильных ответов",
                         "Начало тестирования",
@@ -65,7 +65,7 @@ namespace Testing.Model
                         "Фамилия",
                         "Имя",
                         "Оценка",
-                        "Рейтинг",
+                        "Рейтинг(%)",
                         "Кол-во правильных ответов",
                         "Кол-во неправильных ответов",
                         "Начало тестирования",
@@ -85,14 +85,14 @@ namespace Testing.Model
                     new []
                     {
                         index as object,
-                        _studentInfo.Grope,
+                        _studentInfo.Group,
                         _studentInfo.Firstname,
                         _studentInfo.Lastname,
                         _studentInfo.RecordBookNum,
                         _testInfo.Mark,
                         _testInfo.Rate,
                         _testInfo.CorrectAnswersCount,
-                        _testInfo.QuestionCount - _testInfo.CorrectAnswersCount,
+                        _testInfo.AnswerCount - _testInfo.CorrectAnswersCount,
                         _testInfo.TestStartTime.ToString("t"),
                         $"{timeSpan.Minutes:d2}:{timeSpan.Seconds:d2}",
                     },
@@ -104,13 +104,13 @@ namespace Testing.Model
                     new []
                     {
                         index as object,
-                        _studentInfo.Grope,
+                        _studentInfo.Group,
                         _studentInfo.Firstname,
                         _studentInfo.Lastname,
                         _testInfo.Mark,
                         _testInfo.Rate,
                         _testInfo.CorrectAnswersCount,
-                        _testInfo.QuestionCount - _testInfo.CorrectAnswersCount,
+                        _testInfo.AnswerCount - _testInfo.CorrectAnswersCount,
                         _testInfo.TestStartTime.ToString("t"),
                         $"{timeSpan.Minutes:d2}:{timeSpan.Seconds:d2}",
                     },
@@ -138,11 +138,11 @@ namespace Testing.Model
         private FileInfo GetFileInfo()
         {
             var testName = Path.GetFileNameWithoutExtension(_testInfo.DbFileInfo.Name);
-            var extention = ConfigurationManager.AppSettings["e"];
+            var extension = ConfigurationManager.AppSettings["e"];
             var today = DateTime.Today.ToString("d");
             var fileName = _testInfo.IsExam 
-                ? $"Exam_{testName}_{today}{extention}" 
-                : $"{testName}_{today}{extention}";
+                ? $"Exam_{testName}_{today}{extension}" 
+                : $"{testName}_{today}{extension}";
             var path = Path.GetFullPath(
                 Path.Combine(ConfigurationManager.AppSettings["reportDir"], fileName));
             

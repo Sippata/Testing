@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
@@ -12,13 +13,13 @@ namespace Testing.Model
     {
         public string QuestionText { get; set; }
         public BitmapImage Picture { get; set; }
-        public ObservableCollection<KeyValuePair<string, bool>> AnswerPairs { get; }
+        public List<KeyValuePair<string, bool>> AnswerPairs { get; }
 
         public Question()
         {
             Picture = new BitmapImage();
             QuestionText = "";
-            AnswerPairs = new ObservableCollection<KeyValuePair<string, bool>>();
+            AnswerPairs = new List<KeyValuePair<string, bool>>();
         }
         
         public void SetPicture(string imgName)
@@ -38,13 +39,13 @@ namespace Testing.Model
             return bitmap;
         }
 
-        public bool IsCorrect(string answer)
+        public bool IsCorrect(string answer, bool isChecked)
         {
             foreach (var pair in AnswerPairs)
             {
                 if (pair.Key == answer)
                 {
-                    return pair.Value;
+                    return pair.Value == isChecked;
                 }
             }
 

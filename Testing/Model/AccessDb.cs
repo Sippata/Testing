@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
@@ -38,42 +39,49 @@ namespace Testing.Model
             return ds;
         }
 
-        public static bool CanOpen(string fullPath, out string errorMes)
+        public List<Question> GetQuestions(string tableName)
         {
-            bool canOpen = true;
-            errorMes = "";
-
-            var builder = new OleDbConnectionStringBuilder
-            {
-                ConnectionString = $"Data Source={fullPath}",
-                Provider = ConfigurationManager.ConnectionStrings["AccessDb"].ProviderName
-            };
+            var log = NLog.LogManager.GetCurrentClassLogger();
             
-            OleDbConnection connection = null;
-
-            try
+            List<Question> questions = new List<Question>();
+            
+            log.Debug($"Connectiong to {_builder.ConnectionString}");
+            using (var connection = new OleDbConnection(_builder.ConnectionString))
             {
-                connection = new OleDbConnection(builder.ConnectionString);
+                log.Debug("Db connected");
 
+                log.Debug("Opening db...");
                 connection.Open();
-            }
-            catch (InvalidOperationException)
-            {
-                canOpen = false;
-                errorMes = "OpenFault";
-            }
-            catch (OleDbException)
-            {
-                canOpen = false;
-                errorMes = "NotDb";
-            }
-            finally
-            {
-                connection?.Close();
-                connection?.Dispose();
-            }
+                log.Debug("Db opened");
+                
+                string query = $"SELECT * FROM {tableName}";
+                log.Debug($"Query = {query}");
+                OleDbCommand command = new OleDbCommand(query, connection);
+                OleDbDataReader reader = command.ExecuteReader();
+                
+                log.Debug("Reading from db...");
+                while (reader.Read())
+                {
+                    Question question = new Question();
 
-            return canOpen;
+                    question.QuestionText = reader["Question"].ToString();
+                    question.SetPicture(reader["Picture"].ToString());
+                    for (int i = 1; i <= 6; i++)
+                    {
+                        string answer = reader[$"Option {i}"].ToString();
+                        bool isCorrect = reader[$"{i} Correct"].ToString() == "1";
+                
+                        if(answer != "")
+                        {
+                            question.AnswerPairs.Add(new KeyValuePair<string, bool>(answer, isCorrect));
+                        }
+                    }
+                    questions.Add(question);
+                }
+                log.Debug("Data was read...");
+            }
+            
+            return questions;
         }
     }
 }

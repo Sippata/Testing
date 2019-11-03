@@ -6,11 +6,11 @@
         xmlns:local="clr-namespace:Testing"
         mc:Ignorable="d"
         Title="ResultWindow" Height="240" Width="300" x:Name="Window"
-        DataContext="{Binding Source={StaticResource ViewModel}}">
+        DataContext="{Binding ResultVm, Source={StaticResource ViewModel}}">
     <StackPanel Margin="5, 30, 5, 10">
         <TextBlock Text="Тест завершен" TextAlignment="Center" FontSize="18" Margin="0,0,0,20"/>
         
-        <TextBlock Text="{Binding FullName, StringFormat=Студент: {0}}" FontSize="16" TextWrapping="Wrap" 
+        <TextBlock Text="{Binding Fullname, StringFormat=Студент: {0}}" FontSize="16" TextWrapping="Wrap" 
                    Margin="0,0,0,5"/>
         
         <TextBlock Text="{Binding Group, StringFormat=Группа: {0}}" FontSize="16" TextWrapping="Wrap"
@@ -21,9 +21,9 @@
         
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Button HorizontalAlignment="Center" Content="Продолжить" Margin="10" 
-                    Command="{Binding Continue}" CommandParameter="{Binding ElementName=Window}"/>
+                    Command="{Binding Continue}"/>
             <Button HorizontalAlignment="Center" Content="Выход" Margin="10"
-                    Command="{Binding Exit}" CommandParameter="{Binding ElementName=Window}"/>
+                    Command="{Binding Exit}"/>
         </StackPanel>
     </StackPanel>
 </Window>

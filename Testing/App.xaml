@@ -5,6 +5,6 @@
              xmlns:viewModel="clr-namespace:Testing.ViewModel"
              StartupUri="TestingWindow.xaml">
     <Application.Resources>
-        <viewModel:AppViewModel x:Key="ViewModel" />
+        <viewModel:ViewModelLocator x:Key="ViewModel" />
     </Application.Resources>
 </Application>

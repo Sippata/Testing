@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Testing.ViewModel;
 
 namespace Testing
@@ -31,6 +32,10 @@ namespace Testing
             
             if(SendButton != null)
                 SendButton.IsEnabled = _noOfErrorsOnScreen <= 0;
+        }
+        private void CloseCommandHandler(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:Testing.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="210" Width="450" x:Name="Window"
-        DataContext="{Binding Source={StaticResource ViewModel}}" controls:Validation.Error="OnError" 
+        DataContext="{Binding StudentInfoVm, Source={StaticResource ViewModel}}" controls:Validation.Error="OnError" 
         Loaded="Window_OnLoaded">
     <Window.Resources>
         <controls:BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
@@ -28,22 +28,40 @@
             
             <!-- Firstname -->
             <TextBlock>Фамилия</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding Path=Firstname, 
-                    UpdateSourceTrigger=PropertyChanged,
-                    NotifyOnValidationError=True}" LostFocus="TextBox_OnLostFocus" x:Name="Firstname"/>
-            
+            <TextBox Grid.Column="1" Grid.Row="0" Margin="5" x:Name="Firstname">
+                <TextBox.Text>
+                    <Binding Path="Firstname" UpdateSourceTrigger="PropertyChanged" NotifyOnValidationError="True">
+                        <Binding.ValidationRules>
+                            <ExceptionValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
             <!-- Lastname -->
             <TextBlock Grid.Column="0" Grid.Row="1">Имя</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Path=Lastname, 
-                    UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,
-                    NotifyOnValidationError=True}" LostFocus="TextBox_OnLostFocus" x:Name="Lastname" />
-            
+            <TextBox Grid.Column="1" Grid.Row="1" Margin="5" x:Name="Lastname">
+                <TextBox.Text>
+                    <Binding Path="Lastname" UpdateSourceTrigger="PropertyChanged" NotifyOnValidationError="True">
+                        <Binding.ValidationRules>
+                            <ExceptionValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
             <!-- Group -->
             <TextBlock Grid.Column="0" Grid.Row="2">Группа</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="2" Margin="5" Text="{Binding Path=Group,
-                    UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,
-                    NotifyOnValidationError=True}" LostFocus="TextBox_OnLostFocus" x:Name="Group"/>
-            
+            <TextBox Grid.Column="1" Grid.Row="2" Margin="5" x:Name="Group">
+                <TextBox.Text>
+                    <Binding Path="Group" UpdateSourceTrigger="PropertyChanged" NotifyOnValidationError="True">
+                        <Binding.ValidationRules>
+                            <ExceptionValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
             <!-- Record book -->
             <TextBlock Grid.Column="0" Grid.Row="3"
                        Visibility="{Binding Converter={StaticResource VisibilityConverter}, Path=IsExam}">
@@ -51,16 +69,20 @@
             </TextBlock>
             <TextBox Grid.Column="1" Grid.Row="3" Margin="5"
                      Visibility="{Binding Converter={StaticResource VisibilityConverter}, Path=IsExam}"
-                     Text="{Binding Path=RecordBookNum, NotifyOnValidationError=True, ValidatesOnDataErrors=True,
-                     UpdateSourceTrigger=PropertyChanged}" 
-                     LostFocus="TextBox_OnLostFocus"  x:Name="BookNum"/>
+                     x:Name="BookNum">
+                <TextBox.Text>
+                    <Binding Path="RecordBookNum" UpdateSourceTrigger="PropertyChanged" NotifyOnValidationError="True">
+                        <Binding.ValidationRules>
+                            <ExceptionValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
         </Grid>
         
         <!-- Buttons -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Margin="10" Content="Принять" Command="{Binding SendStudentInfo}"
-                    CommandParameter="{Binding ElementName=Window}" 
-                    x:Name="SendButton"/>
+            <Button Margin="10" Content="Принять" Command="{Binding SendInfo}" x:Name="SendButton"/>
         </StackPanel>
     </StackPanel>
 </Window>
