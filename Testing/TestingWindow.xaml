@@ -3,8 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:Testing"
-        xmlns:vm="clr-namespace:Testing.ViewModel"
         mc:Ignorable="d"
         Title="TestingWindow" Height="450" Width="800" x:Name="Window"
         DataContext="{Binding TestingVm, Source={StaticResource ViewModel}}" Loaded="TestingWindow_OnLoaded">
@@ -12,9 +10,9 @@
         <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenTest}"/>
         <KeyBinding Key="Q" Modifiers="Control" Command="{Binding Exit}"/>
     </Window.InputBindings>
-    <StackPanel Margin="10">
+    <DockPanel Margin="10" LastChildFill="True">
         <!--Menu-->
-        <Menu VerticalAlignment="Top">
+        <Menu VerticalAlignment="Top" DockPanel.Dock="Top">
             <MenuItem Header="Тест">
                 <MenuItem Header="Открыть" Command="{Binding OpenTest}" InputGestureText="Ctrl+O"/>
                 <MenuItem Header="Выход" Command="{Binding Exit}" InputGestureText="Ctrl+Q" />
@@ -24,12 +22,11 @@
             </MenuItem>
         </Menu>
         
-        <TextBlock Text="{Binding Student}" Margin="10 0" FontSize="20" FontWeight="Bold" TextAlignment="Right"/>
+        <TextBlock Text="{Binding Student}" Margin="10 0" FontSize="20" FontWeight="Bold" TextAlignment="Right"
+                   DockPanel.Dock="Top"/>
         
         <Grid>
-            
             <Grid.RowDefinitions>
-                <RowDefinition Height="1.6*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -37,62 +34,57 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             
-            <!-- Text block for question -->
-            <TextBlock Grid.Row="0" Grid.Column="0" TextWrapping="Wrap"
-                       FontSize="16" Margin="10" Text="{Binding QuestionText}"/>
-            
-            <!-- Image block -->
-            <Image Grid.Row="0" Grid.Column="1" Source="{Binding Image}" />
-
-            <ScrollViewer Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Auto">
-                <StackPanel>
-                    <!-- List of answers -->
-                    <ListBox ItemsSource="{Binding Answers}"
-                             x:Name="AnswerListBox">
-                    </ListBox>
+            <DockPanel Grid.Column="0" LastChildFill="True">
                 
-                    <!-- Button for send and skip answer -->
-                    <StackPanel Orientation="Horizontal">
-                        <Button Width="100" Height="50" HorizontalAlignment="Left" Margin="20 10 10 0" 
-                                Content="Ответить"
-                                Command="{Binding SendAnswer}"/>
-                        <Button Width="100" Height="50" HorizontalAlignment="Right" Margin="10 10 0 0" 
-                                Content="Пропустить"
-                                Command="{Binding SkipQuestion}"/>
+                <ScrollViewer DockPanel.Dock="Bottom" VerticalScrollBarVisibility="Auto" Margin="0 0 0 20">
+                    <StackPanel>
+                        <!-- List of answers -->
+                        <ListBox ItemsSource="{Binding Answers}">
+                        </ListBox>
+                
+                        <!-- Button for send and skip answer -->
+                        <StackPanel Orientation="Horizontal">
+                            <Button Width="100" Height="50" HorizontalAlignment="Left" Margin="20 10 10 0" 
+                                    Content="Ответить"
+                                    Command="{Binding SendAnswer}"/>
+                            <Button Width="100" Height="50" HorizontalAlignment="Right" Margin="10 10 0 0" 
+                                    Content="Пропустить"
+                                    Command="{Binding SkipQuestion}"/>
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
-            </ScrollViewer>
+                </ScrollViewer>
+                
+                <!-- Text block for question -->
+                <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap"
+                           FontSize="16" Margin="10" Text="{Binding QuestionText}"/>
+            </DockPanel>
+            
+            <DockPanel Grid.Column="1" Grid.Row="0">
 
-            <Grid Grid.Row="1" Grid.Column="1" Margin="10">
+                <DockPanel DockPanel.Dock="Bottom" Margin="10">
                 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                
-                <!-- Progress bars information-->
-                <StackPanel>
-                    <ProgressBar Height="10" Margin="5" Background="Gray" Minimum="0"
-                        Value="{Binding CorrectQuestionCount}" Maximum="{Binding QuestionCount}"/>
+                    <StackPanel Margin="10 0" DockPanel.Dock="Right">
+                        <!-- Timer -->
+                        <TextBlock FontSize="14" FontStretch="ExtraExpanded" Margin="5"
+                                   Text="{Binding TimeText, StringFormat=Время: {0}}"/>
+                        <!-- The number of remaining questions -->
+                        <TextBlock FontSize="14" FontStretch="ExtraExpanded" Margin="5"
+                                   Text="{Binding PendingQuestionCount, StringFormat=Осталось: {0}}"/>
+                    </StackPanel>
                     
-                    <ProgressBar Height="10" Margin="5" Background="Gray" Minimum="0" Foreground="IndianRed"
-                        Value="{Binding WrongQuestionCount}" Maximum="{Binding QuestionCount}"/>
+                    <!-- Progress bars information-->
+                    <StackPanel DockPanel.Dock="Left">
+                        <ProgressBar Height="10" Margin="5" Background="Gray" Minimum="0"
+                                     Value="{Binding CorrectQuestionCount}" Maximum="{Binding QuestionCount}"/>
                     
-                </StackPanel>
+                        <ProgressBar Height="10" Margin="5" Background="Gray" Minimum="0" Foreground="IndianRed"
+                                     Value="{Binding WrongQuestionCount}" Maximum="{Binding QuestionCount}"/>
+                    </StackPanel>
+                </DockPanel>
                 
-                <StackPanel Grid.Row="0" Grid.Column="1">
-                    <!-- Timer -->
-                    <TextBlock TextAlignment="Center" FontSize="14" FontStretch="ExtraExpanded" Margin="5"
-                               Text="{Binding TimeText, StringFormat=Время: {0}}"/>
-                    <!-- The number of remaining questions -->
-                    <TextBlock TextAlignment="Center" FontSize="14" FontStretch="ExtraExpanded" Margin="5"
-                               Text="{Binding PendingQuestionCount, StringFormat=Осталось: {0}}"/>
-                </StackPanel>
-            </Grid>
+                <!-- Image block -->
+                <Image DockPanel.Dock="Top" Source="{Binding Image}" />
+            </DockPanel>
         </Grid>
-    </StackPanel>
+    </DockPanel>
 </Window>

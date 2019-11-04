@@ -167,7 +167,7 @@ namespace Testing.ViewModel
                         {
                             Text = pair.Key,
                             TextWrapping = TextWrapping.Wrap,
-                        }, FontSize = 16, IsChecked = pair.Value};
+                        }, FontSize = 16};
                         cb.Checked += (o, args) => _checkedItemCount += 1;
                         cb.Unchecked += (o, args) => _checkedItemCount -= 1;
                         Answers.Add(cb);
