@@ -98,8 +98,6 @@
     <Compile Include="TestingWindow.xaml.cs">
       <DependentUpon>TestingWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\AppViewModel.cs" />
-    <Compile Include="ViewModel\AppVM_Validate.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ResultVM.cs" />
     <Compile Include="ViewModel\SelectTestVM.cs" />
